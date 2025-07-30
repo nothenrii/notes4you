@@ -100,6 +100,7 @@ class AudioManager {
           // Audio preloaded successfully
         },
         onerror: (error) => {
+          console.error("Failed to preload audio:", error);
           // Failed to preload audio
         }
       }).toDestination();
@@ -165,6 +166,7 @@ class AudioManager {
               // Custom audio loaded successfully
             },
             onerror: (error) => {
+              console.error("Failed to load custom audio:", error);
               // Failed to load custom audio
             }
           }).toDestination();

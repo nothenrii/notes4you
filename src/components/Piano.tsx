@@ -40,6 +40,7 @@ const Piano: React.FC = () => {
             audioManager
               .preloadAudio(note.custom_audio_url)
               .catch((error: any) => {
+                console.error("Failed to preload audio:", error);
                 // Failed to preload audio
               });
           }
@@ -92,7 +93,6 @@ const Piano: React.FC = () => {
 
       const noteString = getNoteString(keyData);
       const noteData = notesData[noteString];
-
 
       // Play audio - audio context will be started automatically if needed
       try {
