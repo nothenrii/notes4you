@@ -400,7 +400,7 @@ const AddNoteModal: React.FC<AddNoteModalProps> = ({
             <input
               type="file"
               id="audio"
-              accept="audio/*"
+              accept="audio/mp3,audio/wav,audio/ogg,audio/m4a,audio/aac,audio/mpeg,audio/webm,audio/flac,.mp3,.wav,.ogg,.m4a,.aac,.mpeg,.webm,.flac"
               onChange={(e) => {
                 handleFileChange(e, "audio");
               }}

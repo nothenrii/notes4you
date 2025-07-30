@@ -14,7 +14,18 @@ const MAX_LENGTHS = {
 // Allowed file types
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
-const ALLOWED_AUDIO_TYPES = ['audio/mp3', 'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/m4a'];
+const ALLOWED_AUDIO_TYPES = [
+    'audio/mp3', 
+    'audio/mpeg', 
+    'audio/wav', 
+    'audio/ogg', 
+    'audio/m4a', 
+    'audio/aac', 
+    'audio/webm', 
+    'audio/flac',
+    'audio/x-m4a', // iOS specific
+    'audio/mp4'    // Sometimes used for m4a files
+];
 
 // Maximum file sizes (in bytes)
 const MAX_FILE_SIZES = {
@@ -131,7 +142,18 @@ export class InputSanitizer {
                 return { valid: false, error: 'Invalid file type' };
         }
 
-        if (!allowedTypes.includes(file.type)) {
+        // Check MIME type first, then fallback to file extension for mobile compatibility
+        const isValidMimeType = allowedTypes.includes(file.type);
+        let isValidExtension = false;
+        
+        if (!isValidMimeType && type === 'audio') {
+            // Fallback: check file extension for audio files (mobile compatibility)
+            const fileName = file.name.toLowerCase();
+            const audioExtensions = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.webm', '.flac'];
+            isValidExtension = audioExtensions.some(ext => fileName.endsWith(ext));
+        }
+        
+        if (!isValidMimeType && !isValidExtension) {
             return {
                 valid: false,
                 error: `Invalid file type. Allowed: ${allowedTypes.join(', ')}`
