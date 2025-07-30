@@ -1,4 +1,4 @@
-# 🎹 88 Notes for Zan
+# 🎹 Notes 4 You
 
 An emotional, musical guestbook laid over a full 88-key piano keyboard. Each key can host a message from a visitor, optionally with a video, photo, and a custom sound.
 
@@ -126,15 +126,6 @@ src/
 - **Row Level Security**: Supabase RLS policies
 - **File Upload Security**: Restricted file types and sizes
 
-## 🌟 Optional Enhancements
-
-Future improvements could include:
-- Random note browser
-- Search and filter functionality
-- Background ambiance with volume controls
-- Social sharing features
-- Note analytics and statistics
-
 ## 📱 Mobile Responsiveness
 
 The application is fully responsive with:
@@ -149,19 +140,6 @@ The application is fully responsive with:
 - **Custom Uploads**: Support for user audio files
 - **Multiple Formats**: MP3, WAV, and other common formats
 - **Hover Playback**: Immediate audio feedback
-
-## 🚀 Deployment
-
-The application can be deployed to:
-- Vercel (recommended for Vite projects)
-- Netlify
-- Any static hosting service
-
-Build the project and deploy the `dist` folder:
-```bash
-npm run build
-# Deploy the dist/ folder
-```
 
 ## 🔧 Development
 
