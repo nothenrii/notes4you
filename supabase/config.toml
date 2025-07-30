@@ -1,0 +1,3 @@
+ [functions.verify-password]
+verify_jwt = false
+import_map = "./functions/verify-password/import_map.json"
