@@ -47,6 +47,13 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
         youtubeUrl: note.youtube_url || "",
         password: "",
       });
+      // Reset files state when opening modal for a note
+      setFiles({
+        photos: [] as File[],
+        video: null as File | null,
+        audio: null as File | null,
+      });
+      setError("");
     }
   }, [note]);
 
@@ -111,14 +118,18 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
         // Validate single file
         const file = selectedFiles[0];
 
-        // Log allowed types for debugging
+        // Debug audio file selection
         if (type === "audio") {
+          console.log('Audio file selected:', file.name, file.type, file.size);
         }
 
         const validation = InputSanitizer.validateFile(file, type);
 
         if (validation.valid) {
           setFiles((prev) => ({ ...prev, [type]: file }));
+          if (type === "audio") {
+            console.log('Audio file set in state:', file.name);
+          }
         } else {
           setError(`Invalid file: ${file.name} - ${validation.error}`);
           return;
@@ -154,12 +165,14 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
 
     // Upload audio (replace existing)
     if (files.audio) {
+      console.log('Uploading audio file:', files.audio.name);
       const audioPath = `${Date.now()}-${files.audio.name}`;
       uploadedUrls.audio = await notesApi.uploadFile(
         "audio",
         audioPath,
         files.audio
       );
+      console.log('Audio uploaded to:', uploadedUrls.audio);
     }
 
     return uploadedUrls;
@@ -216,6 +229,12 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
         photo_urls: uploadedUrls.photos,
         custom_audio_url: uploadedUrls.audio !== undefined ? uploadedUrls.audio : note.custom_audio_url,
       };
+
+      console.log('Audio update check:', {
+        'uploadedUrls.audio': uploadedUrls.audio,
+        'note.custom_audio_url': note.custom_audio_url,
+        'final custom_audio_url': updateData.custom_audio_url
+      });
 
       // Only update password_hash if a new password is provided
       if (sanitizedData.password) {
