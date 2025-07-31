@@ -70,11 +70,23 @@ export const notesApi = {
     const { data, error } = await supabase
       .from('notes_for_zan')
       .insert([noteData])
-      .select()
+      .select('id, note, title, message, author_nickname, youtube_url, video_url, photo_urls, custom_audio_url, created_at')
       .single()
 
     if (error) throw error
-    return data
+    
+    // Check if this note has a password by querying separately (same as getAllNotes)
+    const { data: passwordCheck } = await supabase
+      .from('notes_for_zan')
+      .select('id')
+      .eq('id', data.id)
+      .not('password_hash', 'is', null)
+      .maybeSingle()
+    
+    return {
+      ...data,
+      password_hash: passwordCheck ? 'protected' : undefined
+    }
   },
 
   // Update note (requires password verification)
@@ -83,11 +95,23 @@ export const notesApi = {
       .from('notes_for_zan')
       .update(noteData)
       .eq('id', id)
-      .select()
+      .select('id, note, title, message, author_nickname, youtube_url, video_url, photo_urls, custom_audio_url, created_at')
       .single()
 
     if (error) throw error
-    return data
+    
+    // Check if this note has a password by querying separately (same as getAllNotes)
+    const { data: passwordCheck } = await supabase
+      .from('notes_for_zan')
+      .select('id')
+      .eq('id', data.id)
+      .not('password_hash', 'is', null)
+      .maybeSingle()
+    
+    return {
+      ...data,
+      password_hash: passwordCheck ? 'protected' : undefined
+    }
   },
 
   // Delete note
