@@ -206,22 +206,21 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
       // Upload files
       const uploadedUrls = await uploadFiles();
 
-      // Hash new password if provided
-      const passwordHash = sanitizedData.password
-        ? await bcrypt.hash(sanitizedData.password, 10)
-        : note.password_hash;
-
-      // Update note
-      const updateData = {
+      // Update note data
+      const updateData: any = {
         title: sanitizedData.title,
         message: sanitizedData.message,
         author_nickname: sanitizedData.authorNickname || undefined,
         youtube_url: sanitizedData.youtubeUrl || note.youtube_url,
-        video_url: uploadedUrls.video || note.video_url,
+        video_url: uploadedUrls.video !== undefined ? uploadedUrls.video : note.video_url,
         photo_urls: uploadedUrls.photos,
-        custom_audio_url: uploadedUrls.audio || note.custom_audio_url,
-        password_hash: passwordHash,
+        custom_audio_url: uploadedUrls.audio !== undefined ? uploadedUrls.audio : note.custom_audio_url,
       };
+
+      // Only update password_hash if a new password is provided
+      if (sanitizedData.password) {
+        updateData.password_hash = await bcrypt.hash(sanitizedData.password, 10);
+      }
 
       const updatedNote = await notesApi.updateNote(note.id, updateData);
 
